@@ -1,0 +1,15 @@
+{
+  "name": "floppy-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action: upload files to Floppy (fpy.sh) and comment the share links on the pull request.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

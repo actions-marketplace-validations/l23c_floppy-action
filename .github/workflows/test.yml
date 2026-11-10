@@ -1,0 +1,40 @@
+name: test
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 24]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+
+  live:
+    # Runs the action itself against fpy.sh and comments on the pull request.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./
+        id: floppy
+        with:
+          path: README.md
+          expiry: 1D
+          api-key: ${{ secrets.FLOPPY_API_KEY }}
+      - name: Check the outputs
+        run: |
+          test -n "${{ steps.floppy.outputs.url }}"
+          curl -fsSI "${{ steps.floppy.outputs.url }}" | head -1

@@ -1,0 +1,50 @@
+name: Floppy file share
+description: Upload files from a workflow to Floppy (fpy.sh) and comment the share links on the pull request. See who opens each file, page by page.
+author: Floppy
+branding:
+  icon: share-2
+  color: blue
+
+inputs:
+  path:
+    description: File, directory or glob to upload. One per line for several; a line starting with ! excludes matches.
+    required: true
+  api-key:
+    description: A Floppy API key (fpy_live_…) from a repository secret, so the files land in your account. Without it, files go to a new unclaimed account that expires after 72 hours.
+    required: false
+  label:
+    description: Make a per-recipient link with this label (for example "Design review"), so its views are counted apart.
+    required: false
+  expiry:
+    description: How long the links work, one of 1D, 2D, 3D, 5D, 1W, 2W, 1M, 3M or NEVER. Without an api-key, 3D at most.
+    required: false
+  comment:
+    description: Comment the links on the pull request. "auto" comments on pull_request and pull_request_target events.
+    required: false
+    default: auto
+  github-token:
+    description: Token used to comment. Needs pull-requests write permission.
+    required: false
+    default: ${{ github.token }}
+  if-no-files-found:
+    description: What to do when path matches nothing, one of error, warn or ignore.
+    required: false
+    default: error
+  api-url:
+    description: Floppy base URL. Leave the default.
+    required: false
+    default: https://fpy.sh
+
+outputs:
+  url:
+    description: The share link of the first file.
+  urls:
+    description: Every share link as a JSON array, in upload order.
+  links:
+    description: 'Every upload as a JSON array of { name, url, id, scan, expires_at }.'
+  claim-url:
+    description: Set when the files went to an unclaimed account. Whoever opens it first gets the files, so treat it as a secret.
+
+runs:
+  using: node24
+  main: src/index.js
