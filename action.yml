@@ -1,5 +1,5 @@
 name: Floppy file share
-description: Upload files from a workflow to Floppy (fpy.sh) and comment the share links on the pull request. See who opens each file, page by page.
+description: Upload files from a workflow to Floppy (fpy.sh), comment the share links on the PR, and see who opens each file.
 author: Floppy
 branding:
   icon: share-2
